@@ -54,7 +54,11 @@ function sendMessage(message) {
     if (message['messageAttachmentType'] === '') {
         hook.send(message['messageText']);
     } else {
-        hook.send(message['messageAttachmentUrl']);
+        if(message['messageText'] === '') {
+            hook.send(message['messageAttachmentUrl']);
+        } else {
+            hook.send(message['messageText'] + '\n' + message['messageAttachmentUrl']);
+        }
     }
 }
 client.connect(url, 'echo-protocol');
