@@ -31,7 +31,9 @@ client.on('connect', function(connection) {
             if (message.utf8Data.startsWith('42["message"')) {
                 var data = JSON.parse(message.utf8Data.slice(13, -1));
                 console.log(data['messageDetails']);
-                sendMessage(data['messageDetails']);
+                if (data['messageDetails']['_conversationId'] in hooks) {
+                    sendMessage(data['messageDetails']);
+                }
             }
         }
     });
@@ -57,7 +59,8 @@ function sendMessage(message) {
         if(message['messageText'] === '') {
             hook.send(message['messageAttachmentUrl']);
         } else {
-            hook.send(message['messageText'] + '\n' + message['messageAttachmentUrl']);
+            hook.send(message['messageAttachmentUrl']);
+            hook.send(message['messageText']);
         }
     }
 }
